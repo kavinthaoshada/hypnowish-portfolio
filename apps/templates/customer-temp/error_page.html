@@ -1,0 +1,91 @@
+{% extends "customer-layouts/base-fullscreen.html" %}
+{% comment %} {% load static %} {% endcomment %}
+
+{% block title %}{{ error_code }} - {{ error_message }} | hypnowish{% endblock %}
+
+{% block stylesheets %}
+<style>
+  .error-page {
+    min-height: calc(100vh - 60px); /* Adjust based on your navbar height */
+    display: flex;
+    align-items: center;
+  }
+  .error-code {
+    font-size: 8rem;
+    font-weight: bold;
+    color: #2575fc;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  }
+  .error-message {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  .error-description {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  .error-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 2rem;
+  }
+  .helpful-links a {
+    color: #2575fc;
+    text-decoration: none;
+    margin: 0 10px;
+  }
+  .helpful-links a:hover {
+    text-decoration: underline;
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="error-page">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 text-center text-lg-start">
+        <h1 class="error-code">{{ error_code }}</h1>
+        <h2 class="error-message">{{ error_message }}</h2>
+        <p class="error-description">{{ error_description }}</p>
+        <a href="{% url 'home' %}" class="btn btn-primary btn-lg mb-4">Return to Homepage</a>
+        <div class="helpful-links">
+          <a href="{% url 'contact_us' %}">Contact Us</a>
+          <a href="{% url 'faq' %}">FAQ</a>
+          <a href="{% url 'sitemap' %}">Sitemap</a>
+        </div>
+      </div>
+      <div class="col-lg-6 text-center">
+        <img src="{{ ASSETS_ROOT }}/img/home-decor-2.jpg" alt="{{ error_message }}" class="error-image">
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+$(document).ready(function() {
+  // Fade in the error page content
+  $('.error-page').hide().fadeIn(1000);
+
+  // Subtle hover effect for the error code
+  $('.error-code').hover(
+    function() {
+      $(this).css('transform', 'scale(1.05)');
+    },
+    function() {
+      $(this).css('transform', 'scale(1)');
+    }
+  );
+
+  // Smooth scroll to top when clicking "Return to Homepage"
+  $('a[href="{% url "home" %}"]').click(function(e) {
+    e.preventDefault();
+    $('html, body').animate({scrollTop: 0}, 'slow', function() {
+      window.location = '{% url "home" %}';
+    });
+  });
+});
+</script>
+{% endblock javascripts %}

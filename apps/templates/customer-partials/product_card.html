@@ -1,0 +1,114 @@
+<div class="col-lg-4 col-md-6">
+    <div class="card h-100 product-card animate-on-scroll">
+      <div class="card-header bg-transparent border-0 pt-4 pb-0">
+        {% if product.category %}
+        <span class="badge bg-primary mb-2">{{ product.category }}</span>
+        {% endif %}
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">{{ product.name }}</h5>
+          <i class="fas fa-3x fa-{{ product.icon|default:'cube' }} text-primary"></i>
+        </div>
+      </div>
+      {% if product.image %}
+      <img src="{{ LOCAL_MEDIA_URL }}{{ product.image }}" class="card-img-top p-3" alt="{{ product.name }}">
+      {% else %}
+      <img src="{{ ASSETS_ROOT }}/img/ivancik.jpg" class="card-img-top p-3" alt="{{ product.name }}">
+      {% endif %}
+      <div class="card-body">
+        <p class="card-text">{{ product.description|truncatewords:20 }}</p>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="rating">
+            {% for i in "12345"|make_list %}
+              {% if forloop.counter <= product.rating %}
+                <i class="fas fa-star text-warning"></i>
+              {% else %}
+                <i class="far fa-star text-warning"></i>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <p class="card-text mb-0"><strong>LKR {{ product.price }}</strong></p>
+        </div>
+      </div>
+      <div class="card-footer bg-transparent border-0">
+        <div class="d-flex justify-content-between">
+          <a href="{% url 'single_product_detail' product.id %}" class="btn btn-outline-primary flex-grow-1 me-2">
+            <i class="fas fa-info-circle me-1"></i> Learn More
+          </a>
+          <a href="{{ product.demo_url }}" class="btn btn-primary flex-grow-1" data-bs-toggle="modal" data-bs-target="#demoModal{{ product.id }}">
+            <i class="fas fa-play-circle me-1"></i> View Demo
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Demo Modal Start -->
+  {% include "customer-partials/demo_modal.html" %}
+  <!-- Demo Modal End -->
+
+  <style>
+    .product-card {
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      overflow: hidden;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    .product-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+    .product-card:hover .product-overlay {
+      opacity: 1;
+    }
+    .overlay-content {
+      padding: 20px;
+      text-align: left;
+    }
+  </style>
+  
+  <script>
+  $(document).ready(function() {
+    // Animation on scroll
+    function animateOnScroll() {
+      $('.animate-on-scroll').each(function() {
+        var elementTop = $(this).offset().top;
+        var elementBottom = elementTop + $(this).outerHeight();
+        var viewportTop = $(window).scrollTop();
+        var viewportBottom = viewportTop + $(window).height();
+        
+        if (elementBottom > viewportTop && elementTop < viewportBottom) {
+          $(this).addClass('is-visible');
+        }
+      });
+    }
+  
+    // Run animation on load and scroll
+    animateOnScroll();
+    $(window).on('scroll resize', animateOnScroll);
+  
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+  
+    // Demo modal video control
+    $('.modal').on('hidden.bs.modal', function () {
+      var iframe = $(this).find('iframe');
+      var src = iframe.attr('src');
+      iframe.attr('src', '');
+      iframe.attr('src', src);
+    });
+  });
+  </script>

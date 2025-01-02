@@ -1,0 +1,209 @@
+{% extends "customer-layouts/base.html" %}
+{% comment %} {% load static %} {% endcomment %}
+
+{% block title %}Contact Us - hypnowish{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<style>
+  .hero-section {
+    background: linear-gradient(135deg, #2575fc 0%, #2575fc 100%);
+    color: white;
+    padding: 100px 0;
+  }
+  .contact-icon {
+    font-size: 2rem;
+    color: #2575fc;
+    margin-bottom: 1rem;
+  }
+  .contact-info {
+    transition: all 0.3s ease;
+  }
+  .contact-info:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  #map {
+    height: 400px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  .form-control:focus {
+    border-color: #2575fc;
+    box-shadow: 0 0 0 0.2rem rgba(37, 117, 252, 0.25);
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center">
+  <div class="container">
+    <h1 class="display-4 mb-4">Get in Touch</h1>
+    <p class="lead">We're here to answer any questions you may have about our services</p>
+  </div>
+</section>
+
+<!-- Contact Information Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 contact-info">
+          <div class="card-body text-center">
+            <i class="fas fa-map-marker-alt contact-icon"></i>
+            <h4 class="card-title">Visit Us</h4>
+            <p class="card-text">123 Software Lane<br>Tech City, TC 12345<br>Sri Lanka</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 contact-info">
+          <div class="card-body text-center">
+            <i class="fas fa-phone contact-icon"></i>
+            <h4 class="card-title">Call Us</h4>
+            <p class="card-text">+94 123 456 7890<br>Monday - Friday, 9am - 6pm</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 contact-info">
+          <div class="card-body text-center">
+            <i class="fas fa-envelope contact-icon"></i>
+            <h4 class="card-title">Email Us</h4>
+            <p class="card-text">info@hypnowish.com<br>support@hypnowish.com</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Form Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 mb-4">
+        <h2 class="mb-4">Send Us a Message</h2>
+        <form id="contactForm">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="name" class="form-label">Your Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Your Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+          </div>
+          <div class="mb-3">
+            <label for="subject" class="form-label">Subject</label>
+            <input type="text" class="form-control" id="subject" name="subject" required>
+          </div>
+          <div class="mb-3">
+            <label for="message" class="form-label">Your Message</label>
+            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+      </div>
+      <div class="col-lg-6 mb-4">
+        <h2 class="mb-4">Our Location</h2>
+        <div id="map"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center mb-5">Frequently Asked Questions</h2>
+    <div class="accordion" id="faqAccordion">
+      <div class="accordion-item">
+        <h3 class="accordion-header" id="headingOne">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            What types of software do you develop?
+          </button>
+        </h3>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            We specialize in developing e-commerce platforms, mobile applications, standalone software, and custom solutions tailored to our clients' needs.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h3 class="accordion-header" id="headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            How long does it take to develop a custom software solution?
+          </button>
+        </h3>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            The development timeline varies depending on the complexity of the project. Typically, it can range from a few weeks for simple applications to several months for more complex systems. We provide detailed timelines during our initial consultation.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h3 class="accordion-header" id="headingThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            Do you offer ongoing support and maintenance?
+          </button>
+        </h3>
+        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Yes, we offer comprehensive support and maintenance packages for all our software solutions. Our team is dedicated to ensuring your software remains up-to-date and functions optimally.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}
+
+{% block javascripts %}
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+$(document).ready(function() {
+  // Initialize map
+  var map = L.map('map').setView([7.2892264, 80.1002901], 7); // Coordinates for Sri Lanka
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  L.marker([7.2892264, 80.1002901]).addTo(map)
+    .bindPopup('hypnowish Headquarters')
+    .openPopup();
+
+  // Form submission
+  $('#contactForm').on('submit', function(e) {
+    e.preventDefault();
+    // Here you would typically send an AJAX request to your backend
+    // For demonstration, we'll just show an alert
+    Swal.fire({
+      title: 'Message Sent!',
+      text: 'Thank you for contacting us. We will get back to you soon.',
+      icon: 'success',
+      confirmButtonText: 'OK'
+    });
+    this.reset();
+  });
+
+  // Animate contact info cards on hover
+  $('.contact-info').hover(
+    function() { $(this).addClass('shadow-lg').css('cursor', 'pointer'); },
+    function() { $(this).removeClass('shadow-lg'); }
+  );
+
+  // Smooth scroll for anchor links
+  $('a[href^="#"]').on('click', function(event) {
+    var target = $(this.getAttribute('href'));
+    if( target.length ) {
+      event.preventDefault();
+      $('html, body').stop().animate({
+        scrollTop: target.offset().top - 100
+      }, 1000);
+    }
+  });
+});
+</script>
+{% endblock javascripts %}

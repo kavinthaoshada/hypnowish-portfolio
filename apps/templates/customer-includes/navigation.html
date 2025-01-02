@@ -1,0 +1,246 @@
+<!-- Startup Software Company Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm" id="mainNav">
+  <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="/">
+          <img src="{{ ASSETS_ROOT }}/svg/hypnowish.svg" alt="hypnowish logo" height="50" class="me-2">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Categories
+                  </a>
+                  <ul class="dropdown-menu animate slideIn" aria-labelledby="categoriesDropdown">
+                    {% for category in context_categories %}
+                        {% comment %} <li><a class="dropdown-item" href="/categories/{{ category.name|slugify }}">{{ category.name }}</a></li> {% endcomment %}
+                        <li><a class="dropdown-item" href="#">{{ category.name }}</a></li>
+                    {% endfor %}
+                </ul>
+              </li>
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Services
+                  </a>
+                  <ul class="dropdown-menu animate slideIn" aria-labelledby="servicesDropdown">
+                      <li><a class="dropdown-item" href="/services/custom-development">Custom Development</a></li>
+                      <li><a class="dropdown-item" href="/services/support">Support & Maintenance</a></li>
+                  </ul>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'about_us' %}">
+                      About Us
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'contact_us' %}">
+                      Contact
+                  </a>
+              </li>
+          </ul>
+          <div class="ms-lg-3 mt-3 mt-lg-0 d-flex align-items-center">
+              <div class="search-container me-3">
+                  <button class="btn btn-outline-primary rounded-circle search-btn" type="button">
+                      <i class="fas fa-search"></i>
+                  </button>
+                  <div class="search-popup">
+                      <form class="d-flex">
+                          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                          <button class="btn btn-primary" type="submit">Search</button>
+                      </form>
+                  </div>
+              </div>
+              {% if user.is_authenticated %}
+                  <div class="dropdown">
+                      <button class="btn btn-outline-primary dropdown-toggle" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="fas fa-user me-1"></i>Account
+                      </button>
+                      <ul class="dropdown-menu animate slideIn" aria-labelledby="accountDropdown">
+                          <li><a class="dropdown-item" href="{% url 'customer_profile' %}">Profile</a></li>
+                          <li><a class="dropdown-item" href="#">Orders</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                      </ul>
+                  </div>
+              {% else %}
+                  <a href="{% url 'customer_login' %}" class="btn btn-outline-primary me-2">
+                      <i class="fas fa-sign-in-alt me-1"></i>Login
+                  </a>
+                  <a href="{% url 'customer_register' %}" class="btn btn-primary">
+                      <i class="fas fa-user-plus me-1"></i>Register
+                  </a>
+              {% endif %}
+              <a href="{% url 'schedule_demo' %}" class="btn btn-primary animate pulse ms-2">
+                  <i class="fas fa-calendar-check me-1"></i>Schedule Demo
+              </a>
+          </div>
+      </div>
+  </div>
+</nav>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+      // Add smooth scrolling to all links
+      $("a").on('click', function(event) {
+          if (this.hash !== "") {
+              event.preventDefault();
+              var hash = this.hash;
+              $('html, body').animate({
+                  scrollTop: $(hash).offset().top
+              }, 800, function(){
+                  window.location.hash = hash;
+              });
+          }
+      });
+
+      // Add hover animation to dropdown menus
+      $('.dropdown').hover(
+          function() {
+              $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(300);
+          },
+          function() {
+              $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(300);
+          }
+      );
+
+      // Change navbar background on scroll
+      $(window).scroll(function() {
+          if ($(this).scrollTop() > 50) {
+              $('#mainNav').addClass('navbar-scrolled');
+          } else {
+              $('#mainNav').removeClass('navbar-scrolled');
+          }
+      });
+
+      // Search button click event
+      $('.search-btn').click(function(event) {
+          event.stopPropagation();
+          $('.search-popup').toggleClass('show');
+          $('.search-popup input').focus();
+      });
+
+      // Close search popup when clicking outside
+      $(document).click(function(event) {
+          if (!$(event.target).closest('.search-container').length) {
+              $('.search-popup').removeClass('show');
+          }
+      });
+  });
+</script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:wght@300;400;700&display=swap');
+
+  body {
+    font-family: 'Lato', sans-serif;
+  }
+
+  .brand-text {
+      font-weight: 700;
+      font-size: 1.5rem;
+  }
+
+  .brand-text::first-letter,
+  .brand-text::nth-letter(5) {
+      text-transform: uppercase;
+  }
+
+  .animate {
+      animation-duration: 0.3s;
+      -webkit-animation-duration: 0.3s;
+      animation-fill-mode: both;
+      -webkit-animation-fill-mode: both;
+  }
+
+  @keyframes slideIn {
+      0% {
+          transform: translateY(1rem);
+          opacity: 0;
+      }
+      100% {
+          transform:translateY(0rem);
+          opacity: 1;
+      }
+  }
+
+  .slideIn {
+      animation-name: slideIn;
+  }
+
+  @keyframes pulse {
+      0% {
+          transform: scale(1);
+      }
+      50% {
+          transform: scale(1.05);
+      }
+      100% {
+          transform: scale(1);
+      }
+  }
+
+  .pulse {
+      animation-name: pulse;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+  }
+
+  .navbar-scrolled {
+      background-color: rgba(255, 255, 255, 0.95) !important;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+      transition: background-color 200ms linear, box-shadow 200ms linear;
+  }
+
+  .search-container {
+      position: relative;
+  }
+
+  .search-btn {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .search-popup {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-out, visibility 0.3s ease-out, transform 0.3s ease-out;
+    transform: translateY(-10px);
+    z-index: 1000;
+}
+
+.search-popup.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.search-popup form {
+  min-width: 250px;
+}
+
+  @keyframes fadeIn {
+      from {
+          opacity: 0;
+          transform: translateY(-10px);
+      }
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+</style>

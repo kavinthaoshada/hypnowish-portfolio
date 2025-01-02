@@ -1,0 +1,173 @@
+<footer class="footer bg-gradient-dark text-white py-5">
+    <div class="container">
+      <div class="row g-4">
+        <!-- Company Info -->
+        <div class="col-lg-4 col-md-6">
+          <h5 class="text-uppercase mb-4">
+            <img src="{{ ASSETS_ROOT }}/svg/hypnowish.svg" alt="hypnowish logo" height="60" class="me-2">
+            {% comment %} <i class="fas fa-code me-2"></i>HypnoWish {% endcomment %}
+          </h5>
+          <p class="mb-4">
+            Empowering businesses with cutting-edge software solutions. 
+            We transform ideas into powerful, scalable applications.
+          </p>
+          <div class="d-flex social-icons">
+            <a href="#" class="me-3 text-white-50 hover-effect" title="Facebook">
+              <i class="fab fa-facebook-f fa-lg"></i>
+            </a>
+            <a href="#" class="me-3 text-white-50 hover-effect" title="Twitter">
+              <i class="fab fa-twitter fa-lg"></i>
+            </a>
+            <a href="#" class="me-3 text-white-50 hover-effect" title="LinkedIn">
+              <i class="fab fa-linkedin-in fa-lg"></i>
+            </a>
+            <a href="#" class="me-3 text-white-50 hover-effect" title="GitHub">
+              <i class="fab fa-github fa-lg"></i>
+            </a>
+          </div>
+        </div>
+  
+        <!-- Quick Links -->
+        <div class="col-lg-2 col-md-6">
+          <h6 class="text-uppercase mb-4">Quick Links</h6>
+          <ul class="list-unstyled">
+            <li><a href="/products" class="footer-link">Products</a></li>
+            <li><a href="/services" class="footer-link">Services</a></li>
+            <li><a href="/insights" class="footer-link">Insights</a></li>
+            <li><a href="{% url 'about_us' %}" class="footer-link">About Us</a></li>
+            <li><a href="{% url 'contact_us' %}" class="footer-link">Contact</a></li>
+          </ul>
+        </div>
+  
+        <!-- Resources -->
+        <div class="col-lg-2 col-md-6">
+          <h6 class="text-uppercase mb-4">Resources</h6>
+          <ul class="list-unstyled">
+            <li><a href="/blog" class="footer-link">Blog</a></li>
+            <li><a href="/case-studies" class="footer-link">Case Studies</a></li>
+            <li><a href="/documentation" class="footer-link">Documentation</a></li>
+            <li><a href="/api" class="footer-link">API</a></li>
+            <li><a href="/support" class="footer-link">Support</a></li>
+          </ul>
+        </div>
+  
+        <!-- Newsletter -->
+        <div class="col-lg-4 col-md-6">
+          <h6 class="text-uppercase mb-4">Stay Updated</h6>
+          <p class="mb-3">Subscribe to our newsletter for the latest tech insights and company updates.</p>
+          <form id="newsletter-form" action="{% url 'subscribe' %}" class="mb-3">
+            {% csrf_token %}
+            <div class="input-group">
+              {{ subscriber_form.email }}
+              <button class="btn btn-primary" type="submit">Subscribe</button>
+            </div>
+          </form>
+          <p class="small text-white-50">
+            By subscribing, you agree to our <a href="/privacy" class="text-white">Privacy Policy</a> and 
+            <a href="/terms" class="text-white">Terms of Service</a>.
+          </p>
+        </div>
+      </div>
+  
+      <hr class="my-4 bg-secondary">
+  
+      <!-- Bottom Section -->
+      <div class="row align-items-center">
+        <div class="col-md-6 text-center text-md-start">
+          <p class="mb-0 text-white-50">
+            &copy; <span id="current-year"></span> HypnoWish. All rights reserved.
+          </p>
+        </div>
+        <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+          <a href="/privacy" class="text-white-50 me-3">Privacy Policy</a>
+          <a href="/terms" class="text-white-50">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  <style>
+    .bg-gradient-dark {
+      background: linear-gradient(to right, #1a1c20, #2c3e50);
+    }
+    
+    .footer-link {
+      color: #a0aec0;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-link:hover {
+      color: #ffffff;
+      text-decoration: none;
+    }
+    
+    .social-icons a {
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+    
+    .social-icons a:hover {
+      transform: translateY(-3px);
+      color: #ffffff !important;
+    }
+    
+    .hover-effect {
+      transition: color 0.3s ease;
+    }
+    
+    .hover-effect:hover {
+      color: #ffffff !important;
+    }
+  </style>
+  
+  <script>
+  $(document).ready(function() {
+    // Set current year
+    $('#current-year').text(new Date().getFullYear());
+  
+    // Newsletter form submission
+    $('#newsletter-form').submit(function(e) {
+      e.preventDefault();
+      // Here you would typically send an AJAX request to your server
+      alert('Thank you for subscribing!');
+      this.reset();
+    });
+  
+    // Smooth scroll for footer links
+    $('.footer-link').click(function(e) {
+      var target = $(this.hash);
+      if (target.length) {
+        e.preventDefault();
+        $('html, body').animate({
+          scrollTop: target.offset().top
+        }, 1000);
+      }
+    });
+  
+    // Hover effect for social icons
+    $('.social-icons a').hover(
+      function() {
+        $(this).find('i').addClass('fa-beat');
+      },
+      function() {
+        $(this).find('i').removeClass('fa-beat');
+      }
+    );
+  });
+
+  document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch(this.action, {
+      method: 'POST',
+      body: formData,
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    })
+    .then(response => response.json())
+    .then(data => {
+      const messageElement = document.getElementById('newsletter-message');
+      messageElement.style.display = 'block';
+      messageElement.textContent = data.message;
+      messageElement.className = data.success ? 'text-success' : 'text-danger';
+    });
+  });
+  </script>

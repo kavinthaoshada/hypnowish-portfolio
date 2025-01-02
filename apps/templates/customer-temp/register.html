@@ -1,0 +1,179 @@
+{% extends "customer-layouts/base-fullscreen.html" %}
+{% block title %}hypnowish - Empowering Businesses with Cutting-Edge Software Solutions{% endblock %}
+
+{% block stylesheets %}
+<style>
+  body {
+    background-image: url('{{ ASSETS_ROOT }}/img/home-decor-3.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    z-index: -1;
+  }
+  .form-container {
+    max-width: 450px;
+    width: 100%;
+    padding: 2rem;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  }
+  .form-floating > label {
+    left: 0.75rem;
+  }
+  .password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  .btn-register {
+    background-color: #4e73df;
+    border-color: #4e73df;
+    transition: all 0.3s ease;
+  }
+  .btn-register:hover {
+    background-color: #2e59d9;
+    border-color: #2e59d9;
+  }
+  .logo {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 1rem;
+  }
+  .password-strength-meter {
+    height: 5px;
+    transition: all 0.3s ease;
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="backdrop"></div>
+<div class="form-container">
+  <div class="text-center mb-4">
+    <img src="{{ ASSETS_ROOT }}/svg/hypnowishicon.svg" alt="hypnowish logo" height="60" class="me-2">
+    {% comment %} <i class="fas fa-code fa-2x me-2 text-primary"></i> {% endcomment %}
+    <h2 class="mb-3">Join hypnowish</h2>
+    <p class="text-muted">Create your account and start innovating</p>
+  </div>
+  <form method="post" id="registerForm">
+    {% csrf_token %}
+
+    <!-- Username Field -->
+    <div class="form-floating mb-3">
+      {{ form.username }}
+      <label for="{{ form.username.id_for_label }}">
+        <i class="fas fa-user me-2"></i>Username
+      </label>
+      {% if form.username.errors %}
+        <div class="text-danger small mt-1">{{ form.username.errors }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Email Field -->
+    <div class="form-floating mb-3">
+      {{ form.email }}
+      <label for="{{ form.email.id_for_label }}">
+        <i class="fas fa-envelope me-2"></i>Email address
+      </label>
+      {% if form.email.errors %}
+        <div class="text-danger small">{{ form.email.errors }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Phone Number Field -->
+    <div class="form-floating mb-3">
+      {{ form.phone_number }}
+      <label for="{{ form.phone_number.id_for_label }}">
+        <i class="fas fa-phone me-2"></i>Phone Number
+      </label>
+      {% if form.phone_number.errors %}
+        <div class="text-danger small">{{ form.phone_number.errors }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Password1 Field -->
+    <div class="form-floating mb-3 position-relative">
+      {{ form.password1 }}
+      <label for="{{ form.password1.id_for_label }}">
+        <i class="fas fa-lock me-2"></i>Password
+      </label>
+      <span class="password-toggle" id="togglePassword1">
+        <i class="far fa-eye"></i>
+      </span>
+      {% if form.password1.errors %}
+        <div class="text-danger small mt-1">{{ form.password1.errors }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Password2 Field -->
+    <div class="form-floating mb-3 position-relative">
+      {{ form.password2 }}
+      <label for="{{ form.password2.id_for_label }}">
+        <i class="fas fa-lock me-2"></i>Confirm Password
+      </label>
+      <span class="password-toggle" id="togglePassword2">
+        <i class="far fa-eye"></i>
+      </span>
+      {% if form.password2.errors %}
+        <div class="text-danger small">{{ form.password2.errors }}</div>
+      {% endif %}
+    </div>
+
+
+    
+    <div class="d-grid">
+      <button type="submit" class="btn btn-primary btn-register btn-lg">
+        <i class="fas fa-user-plus me-2"></i>Register
+      </button>
+    </div>
+  </form>
+  <div class="text-center mt-4">
+    <p>Already have an account? <a href="{% url 'customer_login' %}" class="text-primary">Log in</a></p>
+  </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+$(document).ready(function() {
+  // Password visibility toggle
+  $('.password-toggle').click(function() {
+    const passwordInput = $(this).siblings('input');
+    const eyeIcon = $(this).find('i');
+    
+    if (passwordInput.attr('type') === 'password') {
+      passwordInput.attr('type', 'text');
+      eyeIcon.removeClass('fa-eye').addClass('fa-eye-slash');
+    } else {
+      passwordInput.attr('type', 'password');
+      eyeIcon.removeClass('fa-eye-slash').addClass('fa-eye');
+    }
+  });
+
+  // Form validation
+  $('#registerForm').submit(function(e) {
+    const password1 = $('#password1').val();
+    const password2 = $('#password2').val();
+
+    if (password1 !== password2) {
+      e.preventDefault();
+      alert('Passwords do not match. Please try again.');
+    }
+  });
+
+  
+});
+</script>
+{% endblock javascripts %}

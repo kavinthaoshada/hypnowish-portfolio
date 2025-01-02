@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" height="100">
+  <g font-family="Arial, sans-serif">
+    <!-- "hypn" and "wish" text separately -->
+
+    <!-- Shutter pattern -->
+    <g transform="translate(50, 80)">
+      <!-- 8 shutter blades -->
+      <g fill="#426687">
+        <!-- Each blade is curved slightly on the outer edge -->
+        <path d="M 0 0 L -8 -30 A 31 31 0 0 1 8 -30 Z" />
+        <path d="M 0 0 L -8 -30 A 31 31 0 0 1 8 -30 Z" transform="rotate(45)" />
+        <path d="M 0 0 L -8 -30 A 31 31 0 0 1 8 -30 Z" transform="rotate(90)" />
+        <path d="M 0 0 L -8 -30 A 31 31 0 0 1 8 -30 Z" transform="rotate(135)" />
+        <path d="M 0 0 L -8 -30 A 31 31 0 0 1 8 -30 Z" transform="rotate(180)" />
+        <path d="M 0 0 L -8 -30 A 31 31 0 0 1 8 -30 Z" transform="rotate(225)" />
+        <path d="M 0 0 L -8 -30 A 31 31 0 0 1 8 -30 Z" transform="rotate(270)" />
+        <path d="M 0 0 L -8 -30 A 31 31 0 0 1 8 -30 Z" transform="rotate(315)" />
+      </g>
+      <!-- Center circle -->
+      <circle cx="0" cy="0" r="4" fill="#38202d"/>
+    </g>
+  </g>
+</svg>

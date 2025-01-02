@@ -1,0 +1,25 @@
+ <!-- Demo Modal Start -->
+ <div class="modal fade" id="demoModal{{ product.id }}" tabindex="-1" aria-labelledby="demoModalLabel{{ product.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="demoModalLabel{{ product.id }}">{{ product.name }} Demo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            {% for screenshot in product.screenshots.all %}
+            <div class="col-md-4">
+              <img src="{{ LOCAL_MEDIA_URL }}{{ screenshot.image }}" class="img-thumbnail" alt="{{ screenshot.caption }}">
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a href="{% url 'view_demo_file' product.id %}" target="_blank" type="button" class="btn btn-primary mx-1">View Demo</a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Demo Modal End -->

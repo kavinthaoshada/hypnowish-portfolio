@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="{{ STATIC_URL }}img/apple-icon.png">
+  <link rel="icon" type="image/png" href="{{ STATIC_URL }}img/favicon.png">
+  
+  <title>{% block title %}E-Commerce (RTL){% endblock %}</title>
+  
+  <!-- Fonts and Icons -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <link href="{{ STATIC_URL }}css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- CSS Files -->
+  <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}css/main-rtl.css" rel="stylesheet">
+  
+  {% block stylesheets %}{% endblock stylesheets %}
+</head>
+
+<body class="rtl">
+  <!-- Navbar -->
+  {% include "includes/navbar-rtl.html" %}
+  
+  <!-- Main Content -->
+  <div class="container mt-4">
+    {% block content %}{% endblock content %}
+  </div>
+  
+  <!-- Footer -->
+  {% include "includes/footer-rtl.html" %}
+  
+  <!-- Scripts -->
+  <script src="{{ STATIC_URL }}js/jquery.min.js"></script>
+  <script src="{{ STATIC_URL }}js/bootstrap.bundle.min.js"></script>
+  <script src="{{ STATIC_URL }}js/main.js"></script>
+  
+  {% block javascripts %}{% endblock javascripts %}
+</body>
+</html>

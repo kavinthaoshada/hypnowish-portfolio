@@ -1,0 +1,191 @@
+{% extends "customer-layouts/base.html" %}
+
+{% block title %}hypnowish - Empowering Businesses with Cutting-Edge Software Solutions{% endblock %}
+
+{% block stylesheets %}
+<style>
+  .hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('{{ ASSETS_ROOT }}/img/home-decor-2.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+  .feature-icon {
+    font-size: 2.5rem;
+    height: 3rem;
+    width: 3rem;
+    color: #0d6efd;
+  }
+  .testimonial-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  .product-card {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  }
+  .animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-white text-center">
+  <div class="container">
+    <h1 class="display-3 fw-bold mb-4">Innovate. Transform. Succeed.</h1>
+    {% comment %} <p class="lead mb-5">Empowering businesses with cutting-edge software solutions that drive growth and efficiency.</p> {% endcomment %}
+    <p class="lead mb-5">Hypnotize the world with your wishes.</p>
+    <a href="#products" class="btn btn-primary btn-lg me-3">Explore Our Products</a>
+    <a href="#contact" class="btn btn-outline-light btn-lg">Get in Touch</a>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-5">Why Choose TechInnovate?</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm animate-on-scroll">
+          <div class="card-body text-center">
+            <div class="feature-icon mb-3">
+              <i class="fas fa-rocket"></i>
+            </div>
+            <h3 class="h5 card-title">Cutting-Edge Technology</h3>
+            <p class="card-text">Stay ahead with our state-of-the-art software solutions designed for the future.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm animate-on-scroll">
+          <div class="card-body text-center">
+            <div class="feature-icon mb-3">
+              <i class="fas fa-users"></i>
+            </div>
+            <h3 class="h5 card-title">Expert Team</h3>
+            <p class="card-text">Our skilled professionals ensure top-quality development and support.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm animate-on-scroll">
+          <div class="card-body text-center">
+            <div class="feature-icon mb-3">
+              <i class="fas fa-cogs"></i>
+            </div>
+            <h3 class="h5 card-title">Customized Solutions</h3>
+            <p class="card-text">Tailored software that perfectly fits your unique business needs.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Products Section -->
+{% include "customer-partials/featured_products.html" %}
+
+<!-- Testimonials Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-5">What Our Clients Say</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm animate-on-scroll">
+          <div class="card-body text-center">
+            <img src="{{ ASSETS_ROOT }}/img/marie.jpg" alt="Client 1" class="testimonial-img mb-3">
+            <p class="card-text">"TechInnovate transformed our business processes, increasing efficiency by 40%."</p>
+            <h5 class="card-title mb-0">John Doe</h5>
+            <p class="card-text"><small class="text-muted">CEO, Tech Corp</small></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm animate-on-scroll">
+          <div class="card-body text-center">
+            <img src="{{ ASSETS_ROOT }}/img/bruce-mars.jpg" alt="Client 2" class="testimonial-img mb-3">
+            <p class="card-text">"Their custom solutions helped us stay ahead of the competition."</p>
+            <h5 class="card-title mb-0">Jane Smith</h5>
+            <p class="card-text"><small class="text-muted">CTO, Innovate Inc</small></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm animate-on-scroll">
+          <div class="card-body text-center">
+            <img src="{{ ASSETS_ROOT }}/img/ivancik.jpg" alt="Client 3" class="testimonial-img mb-3">
+            <p class="card-text">"Exceptional support and cutting-edge technology. Highly recommended!"</p>
+            <h5 class="card-title mb-0">Mike Johnson</h5>
+            <p class="card-text"><small class="text-muted">Founder, StartUp Co</small></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action Section -->
+<section id="contact" class="py-5 bg-primary text-white">
+  <div class="container text-center">
+    <h2 class="mb-4">Ready to Innovate?</h2>
+    <p class="lead mb-4">Let's discuss how we can help your business grow with our cutting-edge software solutions.</p>
+    <a href="{% url 'contact_us' %}" class="btn btn-light btn-lg">Contact Us Today</a>
+  </div>
+</section>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+$(document).ready(function() {
+  // Smooth scrolling for anchor links
+  $('a[href^="#"]').on('click', function(event) {
+    var target = $(this.getAttribute('href'));
+    if( target.length ) {
+      event.preventDefault();
+      $('html, body').stop().animate({
+        scrollTop: target.offset().top - 100
+      }, 1000);
+    }
+  });
+
+  // Animation on scroll
+  function animateOnScroll() {
+    $('.animate-on-scroll').each(function() {
+      var elementTop = $(this).offset().top;
+      var elementBottom = elementTop + $(this).outerHeight();
+      var viewportTop = $(window).scrollTop();
+      var viewportBottom = viewportTop + $(window).height();
+      
+      if (elementBottom > viewportTop && elementTop < viewportBottom) {
+        $(this).addClass('is-visible');
+      }
+    });
+  }
+
+  // Run animation on load and scroll
+  animateOnScroll();
+  $(window).on('scroll resize', animateOnScroll);
+
+  // Product card hover effect
+  $('.product-card').hover(
+    function() { $(this).addClass('shadow-lg'); },
+    function() { $(this).removeClass('shadow-lg'); }
+  );
+});
+</script>
+{% endblock javascripts %}

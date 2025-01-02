@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Activate Your Account</title>
+</head>
+<body>
+    <p>Hi {{ user.username }},</p>
+    <p>Thank you for registering with TechInnovate. Please click the link below to activate your account:</p>
+    <p>
+        {% comment %} <a href="http://{{ domain }}{% url 'activate_account' uid=uid token=token %}">
+            Activate My Account
+        </a> {% endcomment %}
+        <a href="{{ activation_link }}">Activate Account</a>
+    </p>
+    <p>If you did not sign up for this account, please ignore this email.</p>
+    <p>Best regards,</p>
+    <p>The TechInnovate Team</p>
+</body>
+</html>

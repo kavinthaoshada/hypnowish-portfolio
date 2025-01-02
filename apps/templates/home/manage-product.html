@@ -1,0 +1,304 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Manage Product {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+  .dropzone {
+    border: 2px dashed #ccc;
+    border-radius: 20px;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+  }
+  .dropzone.dragover {
+    border-color: #000;
+    background-color: #f1f1f1;
+  }
+  .screenshot-preview {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin: 10px;
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4">
+        <div class="card-header pb-0">
+          <h6>Add New Product</h6>
+        </div>
+        <div class="card-body">
+          <form action="{% url 'add_product' %}" method="post" enctype="multipart/form-data" id="productForm">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="name" class="form-control-label">Product Name</label>
+                  <input class="form-control" type="text" id="name" name="name" required>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="category" class="form-control-label">Category</label>
+                  <select class="form-control" id="category" name="category" required>
+                    <option value="">Select a category</option>
+                    {% for category in categories %}
+                      <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="description" class="form-control-label">Description</label>
+                  <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="price" class="form-control-label">Price</label>
+                  <input class="form-control" type="number" step="0.01" id="price" name="price" required>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="icon" class="form-control-label">Icon (Font Awesome class)</label>
+                  <input class="form-control" type="text" id="icon" name="icon">
+                </div>
+              </div>
+              {% comment %} <div class="col-md-4">
+                <div class="form-group">
+                  <label for="rating" class="form-control-label">Rating (1-5)</label>
+                  <input class="form-control" type="number" min="1" max="5" id="rating" name="rating" required>
+                </div>
+              </div> {% endcomment %}
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="image" class="form-control-label">Product Image</label>
+                  <input class="form-control" type="file" id="image" name="image" accept="image/*" required>
+                </div>
+              </div>
+            </div>
+            
+            <hr class="horizontal dark my-4">
+            
+            <h6 class="mb-3">Product Screenshots</h6>
+            <div class="row" id="screenshotContainer">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="screenshots" class="form-control-label">Add Screenshots (up to 5)</label>
+                  <input class="form-control" type="file" id="screenshots" name="screenshots" accept="image/*" multiple>
+                </div>
+              </div>
+            </div>
+            <div class="row" id="screenshotPreview"></div>
+            
+            <hr class="horizontal dark my-4">
+            
+            <h6 class="mb-3">Product Demo</h6>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="demoName" class="form-control-label">Demo Name</label>
+                  <input class="form-control" type="text" id="demoName" name="demoName" required>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="demoDescription" class="form-control-label">Demo Description</label>
+                  <textarea class="form-control" id="demoDescription" name="demoDescription" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="form-control-label">Demo File (ZIP or RAR only)</label>
+                  <div class="dropzone" id="demoDropzone">
+                    <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+                    <p>Drag & Drop your demo file here or click to select</p>
+                    <input type="file" id="demoFile" name="demoFile" accept=".zip,.rar" style="display: none;">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="form-control-label">Download File (ZIP or RAR only)</label>
+                  <div class="dropzone" id="downloadDropzone">
+                    <i class="fas fa-cloud-download-alt fa-3x mb-3"></i>
+                    <p>Drag & Drop your download file here or click to select</p>
+                    <input type="file" id="downloadFile" name="downloadFile" accept=".zip,.rar" style="display: none;">
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row mt-4">
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">Add Product</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header pb-0">
+          <h6>Upload Instructions</h6>
+        </div>
+        <div class="card-body">
+          <ul>
+            <li>Product image should be a clear representation of your product.</li>
+            <li>You can upload up to 5 screenshots showcasing different aspects of your product.</li>
+            <li>The demo file should be a ZIP or RAR archive containing your product demo.</li>
+            <li>The download file should also be a ZIP or RAR archive containing the full product files.</li>
+            <li>Ensure that your demo includes an index.html file at the root level for proper rendering.</li>
+            <li>Organize your demo files in a clear structure for easy navigation.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include "includes/footer.html" %}
+
+</div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const demoDropzone = document.getElementById('demoDropzone');
+    const downloadDropzone = document.getElementById('downloadDropzone');
+    const demoFileInput = document.getElementById('demoFile');
+    const downloadFileInput = document.getElementById('downloadFile');
+    const screenshotInput = document.getElementById('screenshots');
+    const screenshotPreview = document.getElementById('screenshotPreview');
+    
+    function handleDrop(e, fileInput) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        fileInput.files = files;
+        updateDropzoneText(e.target, files[0].name);
+      }
+      
+      e.target.classList.remove('dragover');
+    }
+    
+    function updateDropzoneText(dropzone, fileName) {
+      const textElement = dropzone.querySelector('p');
+      textElement.textContent = `File selected: ${fileName}`;
+    }
+    
+    [demoDropzone, downloadDropzone].forEach(dropzone => {
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add('dragover');
+      });
+      
+      dropzone.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove('dragover');
+      });
+      
+      dropzone.addEventListener('click', () => {
+        const fileInput = dropzone.querySelector('input[type="file"]');
+        fileInput.click();
+      });
+    });
+    
+    demoDropzone.addEventListener('drop', (e) => handleDrop(e, demoFileInput));
+    downloadDropzone.addEventListener('drop', (e) => handleDrop(e, downloadFileInput));
+    
+    demoFileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        updateDropzoneText(demoDropzone, e.target.files[0].name);
+      }
+    });
+    
+    downloadFileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        updateDropzoneText(downloadDropzone, e.target.files[0].name);
+      }
+    });
+    
+    screenshotInput.addEventListener('change', (e) => {
+      screenshotPreview.innerHTML = '';
+      const files = e.target.files;
+      for (let i = 0; i < Math.min(files.length, 5); i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.classList.add('screenshot-preview');
+          screenshotPreview.appendChild(img);
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+    
+   // document.getElementById('productForm').addEventListener('submit', function(e) {
+       // e.preventDefault();
+  
+       // const formData = new FormData(this); // Collect all form data
+       // formData.append('csrfmiddlewaretoken', csrfToken); // Add CSRF token
+  
+        // Send data to server via AJAX
+       // fetch('/add-product/', {
+       //   method: 'POST',
+       //   body: formData,
+       //   headers: {
+       //     'X-CSRFToken': csrfToken // Required for Django CSRF protection
+       //   }
+       // })
+       //   .then(response => {
+       //     if (!response.ok) {
+       //       throw new Error(`HTTP error! Status: ${response.status}`);
+       //     }
+       //     return response.json();
+       //   })
+       //   .then(data => {
+       //     if (data.success) {
+       //       alert('Product added successfully!');
+       //      window.location.href = '/success-url'; // Replace with your success URL
+       //    } else {
+       //       alert('Error adding product: ' + (data.message || 'Unknown error.'));
+       //     }
+       //   })
+       //   .catch(error => {
+       //     console.error('Error:', error);
+       //     alert('An error occurred while submitting the form.');
+       //   });
+      //}); 
+  });
+</script>
+{% endblock javascripts %}
