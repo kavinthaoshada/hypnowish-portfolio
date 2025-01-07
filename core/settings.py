@@ -4,10 +4,11 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 import os, environ
+from datetime import timedelta
 
 env = environ.Env(
     # set casting, default value
-    DEBUG=(bool, False)
+    DEBUG=(bool, True)
 )
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -93,11 +94,37 @@ TEMPLATES = [
                 'apps.context_processors.cfg_assets_root',
                 'django.template.context_processors.media',
                 'customer.context_processors.categories_processor',
-                'customer.context_processors.subscriber_form'
+                'customer.context_processors.subscriber_form',
+                'customer.context_processors.checkout_form'
             ],
         },
     },
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',  # Change to DEBUG for more detailed output
+            'propagate': True,
+        },
+        'your_custom_logger': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+}
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
@@ -205,6 +232,8 @@ AWS_QUERYSTRING_AUTH = True  # Ensures generated links are time-limited
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+PURCHASE_EXPIRATION_PERIOD = timedelta(days=2)
 
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
 

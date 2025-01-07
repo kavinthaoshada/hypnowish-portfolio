@@ -20,6 +20,10 @@ urlpatterns = [
     path('schedule-demo/', views.schedule_demo, name='schedule_demo'),
     path('subscribe/', views.subscribe, name='subscribe'),
     
+    # path('checkout/<int:product_id>/', views.checkout, name='checkout'),
+    path('download/<int:purchase_id>/', views.purchase_success, name='purchase_success'),
+    path('download-file/<int:purchase_id>/', views.download_file, name='download_file'),
+    
     # Password Reset Views
     path('password_reset/', auth_views.PasswordResetView.as_view(
         template_name='customer-temp/password_reset.html'), name='password_reset'),

@@ -131,8 +131,17 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="checkoutForm">
+          <form method="post" id="checkoutForm">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {% comment %} <div class="mb-3">
+              {{ checkout_form.customer }}
+            </div>
             <div class="mb-3">
+              {{ checkout_form.product }}
+            </div> {% endcomment %}
+
+            {% comment %} <div class="mb-3">
               <label for="name" class="form-label">Full Name</label>
               <input type="text" class="form-control" id="name" required>
             </div>
@@ -148,12 +157,12 @@
                 <option value="paypal">PayPal</option>
                 <option value="bank_transfer">Bank Transfer</option>
               </select>
-            </div>
+            </div> {% endcomment %}
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="placeOrderBtn">Complete Purchase</button>
+          <button type="submit" form="checkoutForm" class="btn btn-primary" id="placeOrderBtn">Complete Purchase</button>
         </div>
       </div>
     </div>
