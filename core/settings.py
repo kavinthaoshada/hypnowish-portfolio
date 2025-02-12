@@ -139,7 +139,7 @@ ACCOUNT_AUTHENTICATION_METHOD = "username_email"  # Allow login via username or 
 ACCOUNT_USERNAME_REQUIRED = False  # Disable username requirement
 LOGIN_REDIRECT_URL = "/"  # Redirect after login
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"  # Redirect after logout
-DEFAULT_FROM_EMAIL = "oshadhakavinthajava@gmail.com"  # Sender email for verification
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER') # Sender email for verification
 
 # EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
@@ -148,8 +148,8 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "oshadhakavinthajava@gmail.com"
-EMAIL_HOST_PASSWORD = "wwhb vurv oghs bxdy"
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -224,10 +224,10 @@ STATICFILES_DIRS = (
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
-AWS_ACCESS_KEY_ID = f'{AWS_ACCESS_KEY_ID}'
-AWS_SECRET_ACCESS_KEY = f'{AWS_SECRET_ACCESS_KEY}'
-AWS_STORAGE_BUCKET_NAME = f'{AWS_STORAGE_BUCKET_NAME}'
-AWS_S3_REGION_NAME = f'{AWS_S3_REGION_NAME}'
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
 AWS_QUERYSTRING_AUTH = True 
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
