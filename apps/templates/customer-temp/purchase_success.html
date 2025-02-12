@@ -1,0 +1,29 @@
+{% extends "customer-layouts/base.html" %}
+{% block title %}hypnowish - Empowering Businesses with Cutting-Edge Software Solutions{% endblock %}
+
+{% block stylesheets %}
+{% endblock stylesheets %}
+
+{% block content %}
+<h2>Purchase Successful!</h2>
+<p>You can download the product below. This link will expire at {{ expiration_time|date:"Y-m-d H:i:s" }}.</p>
+<a href="{% url 'download_file' purchase.id %}" class="btn btn-success">Download Now</a>
+{% comment %} <a id="download-button" class="btn btn-success">Download Now</a> {% endcomment %}
+{% endblock content %}
+
+{% block javascripts %}
+{% comment %} document.getElementById('download-button').addEventListener('click', function () {
+    fetch("{% url 'download_file' purchase.id %}")
+        .then(response => response.json())
+        .then(data => {
+            if (data.download_url) {
+                window.location.href = data.download_url;
+            } else {
+                alert('Error: Unable to fetch the download URL.');
+            }
+        })
+        .catch(error => {
+            console.error('Download error:', error);
+        });
+}); {% endcomment %}
+{% endblock javascripts %}

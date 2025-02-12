@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 # from .models import Product
 from django.contrib import messages
@@ -148,7 +148,7 @@ def custom_logout(request):
 #     return render(request, 'customer-temp/dashboard.html')
 
 from django.contrib.auth.decorators import login_required
-from .forms import CustomerProfileForm, SubscriberForm
+from .forms import CustomerProfileForm, SubscriberForm, CheckoutForm
 from two_factor.utils import default_device
 
 @login_required
@@ -242,3 +242,65 @@ def subscribe(request):
         else:
             return JsonResponse({'success': False, 'message': 'Invalid email address.'})
     return JsonResponse({'success': False, 'message': 'Invalid request.'})
+
+
+from django.utils.timezone import now
+from datetime import timedelta
+from botocore.exceptions import NoCredentialsError, ClientError
+
+@login_required
+def purchase_success(request, purchase_id):
+    purchase = get_object_or_404(Purchase, id=purchase_id, customer=request.user)
+    expiration_time = purchase.purchase_date + timedelta(hours=1)
+
+    if now() > expiration_time:
+        return HttpResponseForbidden("This download link has expired.")
+
+    context = {
+        'purchase': purchase,
+        'expiration_time': expiration_time,
+    }
+    return render(request, 'customer-temp/purchase_success.html', context)
+
+import logging
+
+logger = logging.getLogger('your_custom_logger')
+
+def download_file(request, purchase_id):
+    # Fetch the purchase instance
+    purchase = get_object_or_404(Purchase, id=purchase_id)
+
+    # Check if the purchase has expired
+    if purchase.has_expired():
+        return JsonResponse({'error': 'Download link has expired'}, status=400)
+
+    # Get the ProductDemo instance
+    product_demo = get_object_or_404(ProductDemo, product=purchase.product)
+
+    # Initialize the S3 client
+    s3_client = boto3.client(
+        's3',
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        region_name=settings.AWS_S3_REGION_NAME
+    )
+
+    try:
+        # Generate a presigned URL for downloading the file
+        download_url = s3_client.generate_presigned_url(
+            'get_object',
+            Params={
+                'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
+                'Key': product_demo.download_file.name,
+            },
+            ExpiresIn=3600  # URL valid for 1 hour
+        )
+
+        # logger.info(f"Generated presigned URL for purchase {purchase_id}: {download_url}")
+        return JsonResponse({'download_url': download_url})
+
+    except NoCredentialsError:
+        return JsonResponse({'error': 'AWS credentials error'}, status=500)
+
+    except ClientError as e:
+        return JsonResponse({'error': 'Error generating download URL'}, status=500)

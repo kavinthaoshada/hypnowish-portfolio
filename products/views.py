@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
 import boto3
 from django.conf import settings
@@ -111,6 +111,10 @@ def calculate_similarity(text1, text2):
     """
     return SequenceMatcher(None, text1, text2).ratio() * 100
 
+from django.contrib.auth.decorators import login_required
+from customer.forms import CheckoutForm
+
+@login_required
 def single_product_detail(request, pk):
     # Get the product object or return a 404
     product = get_object_or_404(Product, pk=pk)
@@ -136,10 +140,19 @@ def single_product_detail(request, pk):
     
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    
+    if request.method == 'POST':
+        form = CheckoutForm(request.POST, customer=request.user, product=product)
+        if form.is_valid():
+            form.save()
+            return redirect('purchase_success', purchase_id=form.instance.id)
+    else:
+        form = CheckoutForm(customer=request.user, product=product)
 
     return render(request, 'customer-temp/product_detail.html', {
         'product': product,
         'screenshots': screenshots,
         'category': category,
         'page_obj': page_obj,
+        'form': form,
     })

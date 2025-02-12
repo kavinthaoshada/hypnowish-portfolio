@@ -1,5 +1,5 @@
 from django import forms
-from .models import Customer, Subscriber
+from .models import Customer, Subscriber, Purchase
 from django.contrib.auth.forms import UserCreationForm
 
 class CustomerRegistrationForm(UserCreationForm):
@@ -48,10 +48,20 @@ class SubscriberForm(forms.ModelForm):
             })
         }
         
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     for field in self.fields:
-    #         self.fields[field].widget.attrs.update({
-    #             'class': 'form-control',
-    #             'placeholder': self.fields[field].label
-    #         })
+class CheckoutForm(forms.ModelForm):
+    class Meta:
+        model = Purchase
+        fields = ['customer', 'product']
+        widgets = {
+            'customer': forms.HiddenInput(),
+            'product': forms.HiddenInput(),
+        }
+        
+    def __init__(self, *args, **kwargs):
+        customer = kwargs.pop('customer', None)
+        product = kwargs.pop('product', None)
+        super().__init__(*args, **kwargs)
+        if customer:
+            self.fields['customer'].initial = customer
+        if product:
+            self.fields['product'].initial = product
